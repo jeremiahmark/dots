@@ -19,6 +19,7 @@ import { Component } from '@angular/core';
           <option value="hexagon">Hexagon</option>
           <option value="cross">Cross</option>
           <option value="circle">Circle</option>
+          <option value="heart">Heart</option>
         </select>
       </div>
 
@@ -78,6 +79,11 @@ import { Component } from '@angular/core';
                 <circle *ngSwitchCase="'circle'" 
                   [attr.cx]="spacing / 2" [attr.cy]="spacing / 2" [attr.r]="size / 2" 
                   [attr.stroke]="color" [attr.stroke-width]="size / 6" fill="none" />
+                <g *ngSwitchCase="'heart'" 
+                   [attr.transform]="'translate(' + (spacing/2 - size/2) + ',' + (spacing/2 - size/2) + ') scale(' + (size/24) + ')'">
+                  <path [attr.d]="heartPath" [attr.fill]="color" [attr.stroke]="color" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
               </ng-container>
             </g>
           </pattern>
@@ -131,6 +137,8 @@ export class SvgPatternBuilderComponent {
   color = '#000000';
   patternId = 'customPattern';
   svgSize = 200;
+
+  heartPath = "M12 20V5.99995M12 5.99995C10.2006 3.90293 7.19377 3.25485 4.93923 5.17509C2.68468 7.09533 2.36727 10.3059 4.13778 12.577C5.60984 14.4652 10.0648 18.4477 11.5249 19.7366C11.6882 19.8808 11.7699 19.9529 11.8652 19.9813C11.9483 20.006 12.0393 20.006 12.1225 19.9813C12.2178 19.9529 12.2994 19.8808 12.4628 19.7366C13.9229 18.4477 18.3778 14.4652 19.8499 12.577C21.6204 10.3059 21.3417 7.07513 19.0484 5.17509C16.7551 3.27505 13.7994 3.90293 12 5.99995Z";
 
   get trianglePoints(): string {
     const height = this.size * Math.sqrt(3) / 2;
@@ -210,6 +218,16 @@ export class SvgPatternBuilderComponent {
         break;
       case 'circle':
         patternContent = `<circle cx="${this.spacing / 2}" cy="${this.spacing / 2}" r="${this.size / 2}" stroke="${this.color}" stroke-width="${this.size / 6}" fill="none" />`;
+        break;
+        case 'heart':
+          patternContent = `
+            <g transform="translate(${this.spacing/2},${this.spacing/2}) scale(${this.size/24})">
+              <path d="${this.heartPath}" 
+                    stroke="${this.color}" 
+                    stroke-width="2" 
+                    fill="white" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"/>`;
         break;
     }
 
